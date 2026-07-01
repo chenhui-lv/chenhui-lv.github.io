@@ -32,19 +32,19 @@ author:
   uri              : "https://chenhui-lv.github.io"
   email            : "lch1994@mail.ustc.edu.cn" 
 
-  # Academic websites
-  academia         : # URL
-  arxiv            : # URL - Update with the correct link to your profile
-  googlescholar    : "https://scholar.google.com/citations?user=PS_CX0AAAAAJ"
-  inspire-hep      : # URL
-  impactstory      : # URL
-  orcid            : "https://orcid.org/yourorcidurl"
-  semantic         : # URL
-  ssrn             : # URL
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
-  researchgate     : # URL
+ # Academic websites
+  #academia         : # URL
+  arxiv            : https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term=chenhui+lv&terms-0-field=all&classification-mathematics=y&classification-physics_archives=all&classification-include_cross_list=include&date-filter_by=all_dates&date-year=&date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=50&order=-announced_date_first
+  googlescholar    : # URL
+  #inspire-hep      : # URL
+  #impactstory      : # URL
+  orcid: "https://orcid.org/0009-0003-1261-1853"
+  #semantic         : # URL
+  #ssrn             : # URL
+  #pubmed           : # URL
+  #researchgate     : # URL
   scopus           : # URL
-  zotero           : # URL
+  #zotero           : # URL
 
 
   # Repositories and software development
