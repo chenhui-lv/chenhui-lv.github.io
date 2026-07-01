@@ -24,12 +24,12 @@ repository               : "academicpages/academicpages.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Your Sidebar Name"
+  name             : "Chenhui Lv"
   pronouns         : # example: "she/her"  
-  bio              : "Short biography for the left-hand sidebar"
-  location         : "Earth"
-  employer         : "Red Brick University"
-  uri              : # URL
+  bio              : "Researcher in Algebraic Combinatorics"
+  location         : "China"
+  employer         : "University of Science and Technology of China"
+  uri              : "https://chenhui-lv.github.io"
   email            : "lch1994@mail.ustc.edu.cn" 
 
   # Academic websites
