@@ -1,15 +1,15 @@
 ---
 permalink: /
-title: "About Me"
+title: "Chenhui Lv' Website"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-# Chenhui Lv
 
-I am a researcher in mathematics, currently focusing on **Algebraic Combinatorics**. 
+
+My name is Chenhui Lv (吕晨晖 in Chinese). I am currently pursuing a Ph.D. at the University of Science and Technology of China. I am currently focusing on **Algebraic Combinatorics**.
 
 ## Contact Information
 If you are interested in my research or would like to discuss potential collaborations, please feel free to reach out:
