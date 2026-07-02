@@ -40,11 +40,11 @@
 
 
 /* 推荐：莫兰迪冷灰方案 */
+/* 在 assets/css/main.scss 的最底部使用 !important 强制覆盖 */
 body {
-  background-color: #EDF0F2; 
+  background-color: #EDF0F2 !important; 
 }
 
-/* 内容区域保持白色 */
 .page__content {
-  background-color: #FFFFFF;
+  background-color: #FFFFFF !important;
 }
