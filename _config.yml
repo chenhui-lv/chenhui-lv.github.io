@@ -1,32 +1,33 @@
 # ============================================================
 # STEP 1: Your Identity (required)
 # ============================================================
-name: "Richard Feynman"
-title: "Professor of Physics"
-institution: "California Institute of Technology"
-email: richard@university.edu
+name: "Chenhui Lv"
+title: "Ph.D."
+institution: "University of Science and Technology of China"
+email: lch1994@mail.ustc.edu.cn
 photo: headshot.jpg  # place your photo in images/
 
 # ============================================================
 # STEP 2: Your Links (optional -- delete any you don't use)
 # ============================================================
 links:
-  google_scholar: "https://scholar.google.com/citations?user=B7vSqZsAAAAJ"
-  github: "https://github.com/"
-  researchgate: "https://www.researchgate.net/"
-  orcid: ""
-  twitter: ""
+  google_scholar: "https://scholar.google.com/citations?hl=zh-CN&view_op=list_works&gmla=ACrTK9UAgwQS61oGjllXZLQ5t-bE-Jow8qoV8Y-SsQAF08PCzkxvETgRVf6KhbaLuzBBxDsegqns8Hk5y-7lWPPEWtz_5gI&user=i25g1DAAAAAJ"
+  github: "https://github.com/chenhui-lv"
+  #researchgate: "https://www.researchgate.net/"
+  #orcid: "https://orcid.org/0009-0003-1261-1853"
+  #twitter: ""
   linkedin: ""
   cv: ""  # e.g., "papers/cv.pdf" — leave blank to hide the CV icon
-
+  arxiv: "https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term=chenhui+lv&terms-0-field=all&classification-mathematics=y&classification-physics_archives=all&classification-include_cross_list=include&date-filter_by=all_dates&date-year=&date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=50&order=-announced_date_first"
+  
 # ============================================================
 # STEP 3: Site Settings
 # ============================================================
 accent_color: "#1a7a6d"      # theme color for links and buttons
 dark_mode: true              # show dark mode toggle in navbar
-description: "Academic webpage of Dr. Richard Feynman"
+description: "Academic webpage of Chenhui Lv"
 baseurl: ""
-url: ""
+url: "https://chenhui-lv.github.io"
 
 # Google Analytics — paste your GA4 measurement ID, or leave blank
 analytics:
@@ -36,14 +37,15 @@ analytics:
 # STEP 4: Choose Your Pages (comment out any you don't need)
 # ============================================================
 nav_pages:
-  - name: about
+  #- name: about
   - name: publications
-  - name: talks
-  - name: research
-  - name: software
-  - name: team
-  - name: teaching
-  - name: blogs
+  - name: coauthors
+  #- name: talks
+  #- name: research
+  
+  #- name: team
+  #- name: teaching
+  #- name: blogs
 
 # ============================================================
 # Advanced Settings (you probably don't need to change these)
@@ -76,8 +78,8 @@ kramdown:
 plugins: ["jekyll/scholar", "jekyll-sitemap"]
 
 scholar:
-  last_name: Doe
-  first_name: [John]
+  last_name: Lv
+  first_name: [Chenhui]
   style: citesty
   locale: en
   source: /assets/
