@@ -47,10 +47,28 @@ My name is Chenhui Lv (吕晨晖 in Chinese). I am currently pursuing a Ph.D. at
   <span style="color: rgb(224, 76, 76); font-style: italic;">Journal of Combinatorial Theory, Series A</span> (2026)
 </p>
 
-### About my name
-My name in Chinese characters is 吕晨晖. The closest English approximation of the pronunciation is *Lyu Chen-Hway* (IPA: /ly tʂʰən xweɪ/). 
 
-You may notice my family name (吕) spelled in two different ways. On a standard Chinese Pinyin keyboard, the vowel "ü" is typed using the letter "v", which is why I am accustomed to using **Lv** in my academic publications and online profiles. However, on my passport and official documents, it is romanized as **Lyu** to provide a more accurate guide for pronunciation. Both refer to me!
+
+
+
+
+{% comment %} 
+... (保留您原有的注释代码，或者删除) ...
+{% endcomment %}
+
+<!-- 分割线 -->
+<hr style="margin-top: 50px; margin-bottom: 30px; border: 0; border-top: 1px solid #eaeaea;">
+
+<!-- 名言区块 -->
+<div style="text-align: center; font-style: italic; color: #666; max-width: 700px; margin: 0 auto; line-height: 1.6; padding-bottom: 40px;">
+  "I seem to have been only like a boy playing on the sea-shore, and diverting myself in now and then finding a smoother pebble or a prettier shell than ordinary."
+  <br>
+  <span style="font-size: 0.9em; font-weight: 600; color: #999; display: inline-block; margin-top: 12px;">— Isaac Newton</span>
+</div>
+
+
+
+
 
 
 
