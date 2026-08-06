@@ -108,3 +108,10 @@ exclude:
   - package.json
   - package-lock.json
   - docs
+  # --- 在下方添加需要彻底隐藏的 _pages 文件路径 ---
+  - _pages/about.md
+  - _pages/talks.md
+  - _pages/research.md
+  - _pages/team.md
+  - _pages/teaching.md
+  - _pages/blogs.md
