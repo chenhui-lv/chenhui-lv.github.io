@@ -37,7 +37,7 @@
 
 获得发布授权且本地配置已推送后，在 Actions 中选择 Build and Deploy → Run workflow → main。该手动操作会发布，未获授权不得执行。Rakefile 的 publish 任务已停用，调用时直接报错退出，没有 generate 前置任务。
 
-以上工作流修订尚未推送；远端仍是旧触发条件。2026-10-29 已只读核实 Pages 后台：Source 为 GitHub Actions，自定义域名为空，默认网址 https://chenhui-lv.github.io/ 强制 HTTPS；github-pages 环境仅允许 main 分支，允许标签数量为 0。
+工作流已随提交 8d008be 推送到 main，并于 2026-10-29 完成 push 构建验证及手动部署，详情见下方成功发布记录。2026-10-29 已只读核实 Pages 后台：Source 为 GitHub Actions，自定义域名为空，默认网址 https://chenhui-lv.github.io/ 强制 HTTPS；github-pages 环境仅允许 main 分支，允许标签数量为 0。
 
 本地示例 CNAME 已按用户授权删除，当前默认域名无需该文件。重新构建后检查整个生成目录不含 CNAME；不要直接修补 _site。今后改用自定义域名须另行授权并核实后台和 DNS。
 
@@ -50,24 +50,29 @@
 - site.min.js 由 site.js 生成，修改时同步维护。
 - 私人资料存放在发布根目录之外；.gitignore 不能阻止 Jekyll 复制文件。
 - 维护文档和脚本在 _config.yml 的 exclude 中排除。
-- Gemfile.lock 目前被忽略且仅列 Windows 平台；验证 Windows/Linux 构建后再决定提交策略。
+- Gemfile.lock 目前被忽略且仅列 Windows 平台；Windows 本地与 Ubuntu/Ruby 3.2 云端构建均已通过，锁文件提交及跨平台锁定策略仍待确定。
 - package-lock.json 目前被忽略；下一次涉及 JavaScript 依赖时确定锁文件策略。
 - _sass/bootstrap_bak.scss 疑似旧备份，未确认前保留。
 
 ## 初始化待办（2026-10-28 本地审查）
-- [ ] 确认准确身份称谓和教育经历：配置为 Ph.D.，首页为在读博士，教育数据为 Ph.D. Candidate。
+- [ ] 确认准确身份称谓和教育经历：配置为 Ph.D.，首页为在读博士，教育数据为 Ph.D. Candidate（按用户要求暂缓，未修改）。
 - [x] 核实正式发布分支为 main，并统一本地工作流；远端默认分支及最近成功手动发布均为 main。
 - [x] 直接核实 Pages 后台 Source、自定义域名、HTTPS 和环境分支限制（2026-10-29）。
 - [x] 确认当前不使用自定义域名，按用户授权删除本地示例 CNAME（2026-10-29）。
 - [x] 停用 Rakefile 的旧 publish 入口，保留 generate 本地构建。
 - [x] 为 assets/ref.bib 中两条 LK2026 分配唯一键，检查引用和按钮。
 - [x] 将 allnews 示例新闻页排除发布，并停止向 RSS 收录其新闻（原文件保留）。
-- [ ] 确认模板页面、文章、图片、奖项、资助及 papers 中 PDF 的保留范围。
-- [ ] 核验论文、作者、发表状态及相关外部学术链接。
-- [ ] 验证 Ruby、Bundler 和跨平台构建，确定依赖锁文件策略。
-- [ ] 检查页脚 HTML 闭合结构、站点地图设置和移动端表现。
+- [x] 排除指定的 3 个示例页面、3 份 PDF 和 17 张模板图片，保留 23 份原文件；线上地址全部返回 404。
+- [ ] 后续启用其他模板功能时，再确认奖项、资助等原始示例数据的保留或替换范围。
+- [x] 核对两篇新增论文的标题与作者，按用户确认更新 Combinatorica 待刊状态；14 条引用键唯一、合作者统计一致，线上内容已验收。
+- [ ] 按后续更新范围持续核验既有论文的完整元数据；DOI 10.1080/03081087.2019.1628911 的访问检查返回 403，尚不能认定失效。
+- [x] 验证 Windows 本地构建及 Ubuntu/Ruby 3.2 云端构建。
+- [ ] 确定 Gemfile.lock、package-lock.json 的版本管理与跨平台锁定策略。
+- [x] 修复页脚闭合标签，并完成电脑宽度 1440、手机宽度 390 的浏览器检查。
+- [ ] 确认核心页面 sitemap: false 设置是否符合搜索引擎收录意图；手机实机测试尚未执行。
+- [x] 推送 main 后确认仅构建、不上传产物、不部署；获单独授权后手动部署并完成线上验收。
 
-本记录是本地审查结果，不代表线上问题已验证或已修复。
+早期条目记录当时的本地审查状态；当前已完成的线上验证以“成功发布与线上验收”记录为准。未完成事项保留在上述待办中。
 
 ## 首页精选范围调整（2026-10-28）
 - 根据用户要求，从首页 Selected papers 移除 2610.37010 和 2609.12318；两篇论文继续保留在 Publications。
@@ -136,3 +141,29 @@
 - 6 个 HTML 页面与 12 个本地目标检查通过，头像、社交分享图片、样式和脚本仍存在，未发现缺失页面或资源链接。
 - 14 条论文、新论文仅列于 Publications、待刊状态和新增合作者保留；身份称谓按用户要求不改。
 - 未提交、推送或部署。
+
+## 2026-10-29 成功发布与线上验收
+
+本次按用户授权先推送验证，再单独手动部署；日期按 Australia/Sydney 记录。
+
+| 项目 | 记录 |
+| --- | --- |
+| 发布分支 | main |
+| 发布提交 | [8d008bef8f6714d02f426fcddb7b8c7350b1d983](https://github.com/chenhui-lv/chenhui-lv.github.io/commit/8d008bef8f6714d02f426fcddb7b8c7350b1d983) |
+| 提交说明 | 更新学术内容并完善主页维护与受控发布流程 |
+| push 验证 | [Actions 40782444784](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40782444784)：event=push，build 成功，Upload artifact 与 deploy 均 skipped |
+| 手动部署 | [Actions 40782916572](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40782916572)：event=workflow_dispatch，main，build、Upload artifact 和 deploy 均成功 |
+| 部署环境 | github-pages |
+| 正式网址 | https://chenhui-lv.github.io/ |
+
+线上验收结果：
+
+- [首页](https://chenhui-lv.github.io/) 返回 200，保持原有精选范围，两篇新增论文未进入 Selected papers；To appear in Combinatorica 显示正确。
+- [论文页](https://chenhui-lv.github.io/publications/) 返回 200，共 14 条论文，两篇新增论文 2610.37010、2609.12318 已显示；Combinatorica (to appear) 显示正确，BIB 展开及筛选检查通过。
+- [合作者页](https://chenhui-lv.github.io/coauthors/) 返回 200，Zhen-Mu Hong、Fu-Tao Hu 已显示。
+- 3 个示例页面、3 份模板 PDF 和 17 张模板图片共 23 个线上地址全部返回 404；原文件仍保留在源码中。
+- 搜索索引、站点地图和 RSS 均返回 200，无被排除内容的残留引用；RSS 为有效空频道。
+- 三页涉及的 11 个站内页面及资源地址均可访问。
+- 身份称谓保持不变。本次发布未改自定义域名、DNS 或 Pages 后台设置。
+
+以上发布与验收已完成。本节为发布后补充的维护记录；文档记录更新与网站部署分开进行，未再次触发部署。
