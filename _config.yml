@@ -108,6 +108,38 @@ exclude:
   - package.json
   - package-lock.json
   - docs
+  # Keep project maintenance files out of the public site.
+  - AGENTS.md
+  - README.md
+  - SITE_MAINTENANCE.md
+  - UPGRADING.md
+  - setup.sh
+  - 启动网站.bat
+  # Preserve template examples in source control, but do not publish them.
+  - _pages/allnews.md
+  - _posts/1961-11-28-space-time.md
+  - _posts/2024-05-31-great-mathematicians-and-physicists.md
+  - papers/example_proceeding.pdf
+  - papers/feynman06.pdf
+  - papers/feynman39.pdf
+  # Exclude these template images individually so future original images can publish.
+  - images/screenshots/home-dark.png
+  - images/screenshots/home-hero.png
+  - images/screenshots/home-light.png
+  - images/screenshots/publications.png
+  - images/screenshots/search.png
+  - images/screenshots/team.png
+  - images/team/albert-hibbs.svg
+  - images/team/george-zweig.svg
+  - images/team/robert-hellwarth.svg
+  - images/team/thomas-curtright.svg
+  - images/team/william-frazer.svg
+  - images/research/nanotechnology.svg
+  - images/research/partons.svg
+  - images/research/qed.svg
+  - images/research/quantum-computing.svg
+  - images/research/superfluidity.svg
+  - images/research/weak-interactions.svg
   # --- 在下方添加需要彻底隐藏的 _pages 文件路径 ---
   - _pages/about.md
   - _pages/talks.md

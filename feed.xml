@@ -18,6 +18,8 @@ layout: null
       <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
     </item>
     {% endfor %}
+    {% assign news_page = site.pages | where: "url", "/allnews.html" | first %}
+    {% if news_page %}
     {% for article in site.data.news limit:20 %}
     <item>
       <title>{{ article.headline | xml_escape }}</title>
@@ -26,5 +28,6 @@ layout: null
       <link>{{ site.url }}{{ site.baseurl }}/allnews.html</link>
     </item>
     {% endfor %}
+    {% endif %}
   </channel>
 </rss>

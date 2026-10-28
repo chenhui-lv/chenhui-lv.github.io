@@ -38,7 +38,7 @@ My name is Chenhui Lv (吕晨晖 in Chinese). I am currently pursuing a Ph.D. at
 <p style="margin-bottom: 15px;">
   <a href="https://arxiv.org/abs/2506.04964" target="_blank" style="color: rgb(42, 67, 227); font-weight: bold; text-decoration: none;">An improved bound for strongly regular graphs with smallest eigenvalue -m</a><br>
   Jack Koolen, Chenhui Lv, Greg Markowsky, Jongyook Park<br>
-  <span style="color: rgb(224, 76, 76); font-style: italic;">Preprint</span> (2026)
+  <span style="color: rgb(224, 76, 76); font-style: italic;">To appear in Combinatorica</span> (2026)
 </p>
 
 <p style="margin-bottom: 15px;">

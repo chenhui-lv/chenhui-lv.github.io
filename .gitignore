@@ -7,3 +7,9 @@ Gemfile.lock
 package-lock.json
 node_modules/
 .worktrees/
+.jekyll-metadata
+.bundle/
+vendor/bundle/
+*.swp
+*.swo
+Thumbs.db

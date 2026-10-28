@@ -55,13 +55,29 @@
       var entries = document.querySelectorAll('[data-pub-searchable]');
 
       entries.forEach(function (entry) {
-        if (!query) {
-          entry.style.display = '';
-          return;
-        }
+        // Scholar wraps each entry in an li; hide the whole row and marker.
+        var row = entry.closest('li') || entry;
         var text = entry.textContent.toLowerCase();
-        entry.style.display = text.includes(query) ? '' : 'none';
+        row.style.display = !query || text.includes(query) ? '' : 'none';
       });
+
+      document.querySelectorAll('#pubList .bibliography').forEach(function (list) {
+        var visibleRows = Array.from(list.children).filter(function (row) {
+          return row.style.display !== 'none';
+        });
+        var hasResults = visibleRows.length > 0;
+        list.style.display = hasResults ? '' : 'none';
+        var heading = list.previousElementSibling;
+        if (heading && heading.tagName === 'H3') {
+          heading.style.display = hasResults ? '' : 'none';
+        }
+      });
+      var noResults = document.getElementById('pubNoResults');
+      if (noResults) {
+        noResults.hidden = Array.from(entries).some(function (entry) {
+          return (entry.closest('li') || entry).style.display !== 'none';
+        });
+      }
     });
   }
 
