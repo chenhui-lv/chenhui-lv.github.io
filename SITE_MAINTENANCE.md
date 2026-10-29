@@ -51,6 +51,7 @@
 - 私人资料存放在发布根目录之外；.gitignore 不能阻止 Jekyll 复制文件。
 - 维护文档和脚本在 _config.yml 的 exclude 中排除。
 - Gemfile.lock 纳入版本管理，包含 x64-mingw-ucrt 和 x86_64-linux 两个平台及依赖 SHA256 校验值；Bundler 版本由 BUNDLED WITH 固定为 4.0.15。不得为解决安装失败直接删除锁文件或运行全量 bundle update。
+- 当前锁文件已通过 Windows 冻结安装和生产构建，以及 Ubuntu 24.04.5 / Ruby 3.2.11 / Bundler 4.0.15 的实际安装和生产构建；Ubuntu 验证记录见 [Actions 40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977) 及文末核对结果。
 - 首次安装执行 gem install bundler -v 4.0.15，再执行 bundle _4.0.15_ install；验证时临时设置 BUNDLE_FROZEN=true，运行 bundle check 和 JEKYLL_ENV=production 的 bundle exec jekyll build，结束后退出该终端或清除临时环境变量。
 - 依赖变更须单独审查 Gemfile.lock 差异；确认两个平台保留、Bundler 与 Ruby/RubyGems 兼容，再分别验证 Windows 和 Ubuntu。只有用户授权推送后才能检查新的 Actions 构建，部署另行授权。
 - 现有 ruby/setup-ruby@v1 会读取锁文件的 BUNDLED WITH，并在 bundler-cache: true 且存在锁文件时采用 deployment 模式；无需在工作流重复指定 Bundler 版本。本次未修改工作流。
@@ -71,7 +72,7 @@
 - [ ] 按后续更新范围持续核验既有论文的完整元数据；DOI 10.1080/03081087.2019.1628911 的访问检查返回 403，尚不能认定失效。
 - [x] 验证 Windows 本地构建及 Ubuntu/Ruby 3.2 云端构建。
 - [x] 将 Windows/Ubuntu Gemfile.lock 纳入版本管理，按最近成功 Ubuntu 构建锁定依赖，并通过 Windows 冻结安装和生产构建（2026-10-29）。
-- [ ] 在 Ubuntu/Ruby 3.2 上实际验证当前锁文件及 Bundler 4.0.15；历史 Ubuntu 成功构建使用 Bundler 2.4.19，不能代替本次验证。
+- [x] 在 Ubuntu/Ruby 3.2 上实际验证已提交的锁文件及 Bundler 4.0.15；提交 a74213e 的 [Actions 40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977) 安装与生产构建成功，日志锁文件与提交一致，Upload artifact 和 deploy 均 skipped（2026-10-29）。
 - [ ] 后续涉及 JavaScript 依赖时确定 package-lock.json 的版本管理策略（本次暂不处理）。
 - [x] 修复页脚闭合标签，并完成电脑宽度 1440、手机宽度 390 的浏览器检查。
 - [ ] 确认核心页面 sitemap: false 设置是否符合搜索引擎收录意图；手机实机测试尚未执行。
@@ -175,6 +176,8 @@
 
 ## 2026-10-29 Windows / Ubuntu 锁文件准备
 
+本节保留准备及本地验证阶段的历史记录，其中“Ubuntu 实际构建待验证”已由后续的“Ubuntu 锁文件实际构建验证”记录完成确认。
+
 - 基线为最近成功的 [push 构建 40783801700](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40783801700)，提交 c8aa507；Ubuntu 24.04、Ruby 3.2.11、Bundler 2.4.19。该次构建成功且部署跳过。
 - 从该任务日志中的完整锁文件恢复 55 个 Linux 依赖条目，保留版本及依赖约束，补充 Windows x64-mingw-ucrt 平台。新增的三个原生包条目为 ffi 1.17.4、google-protobuf 4.36.2、sass-embedded 1.77.8 的 Windows 版本；Linux 条目未改变。
 - 锁文件记录 Bundler 4.0.15，与本机现有版本一致；[官方兼容性要求](https://guides.rubygems.org/bundler-compatibility/)为 Ruby >= 3.2.0、RubyGems >= 3.4.1。现有 Actions Ruby 3.2 环境满足版本系列要求，但切换 Bundler 后仍须实际验证。
@@ -209,3 +212,29 @@
 - 本机未发现可用的 Ubuntu 环境，因此未执行当前锁文件在 Ubuntu/Ruby 3.2 + Bundler 4.0.15 下的实际安装或构建；待获得相应验证条件或后续推送授权后确认。历史成功记录不能替代该项检查。
 - 本轮未进行浏览器视觉复测或在线外链复查；页面源码、身份称谓、Gemfile、工作流及 package-lock.json 策略均未修改。README 同时纠正了工作流“尚未推送”的过时说明。
 - 准备及验证阶段未提交、推送或部署；随后按用户授权，仅将 Gemfile.lock、.gitignore、README.md 和本维护文档提交到本地 Git，未推送或部署，Ubuntu 实际构建待办保留。旧 Windows 锁文件已备份至 D:/Temp/academic-site-Gemfile.lock-before-cross-platform-20261029；如需回退，可通过新的撤销提交恢复相关改动，并按需恢复该本地备份，旧版本 gem 未删除，无需修改线上网站。
+
+## 2026-10-29 Ubuntu 锁文件实际构建验证
+
+按用户授权，将本地 main 的 a74213e 推送到 GitHub，仅触发 push 构建验证；未手动触发部署。日期按 Australia/Sydney 记录。
+
+| 项目 | 核对结果 |
+| --- | --- |
+| 分支及提交 | main / [a74213e6daab33936ae49f1cad961e751d10c66f](https://github.com/chenhui-lv/chenhui-lv.github.io/commit/a74213e6daab33936ae49f1cad961e751d10c66f) |
+| Actions | [40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977)，event=push，status=completed，conclusion=success |
+| 构建任务 | [build 123179066305](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977/job/123179066305)，success |
+| 实际环境 | Ubuntu 24.04.5 / Ruby 3.2.11（x86_64-linux） |
+| Bundler | 4.0.15，从已提交的 Gemfile.lock 的 BUNDLED WITH 读取并安装 |
+| 安装方式 | deployment=true，bundle install --jobs 4；11 个直接依赖、55 个 gem 安装完成 |
+| 生产构建 | JEKYLL_ENV=production 的 Jekyll 构建成功 |
+| 发布保护 | Upload artifact=skipped；deploy=skipped；该次运行的产物列表为空 |
+
+锁文件核对依据：
+
+- 日志明确显示 `Using Bundler 4.0.15 from Gemfile.lock BUNDLED WITH 4.0.15`，并为后续配置和锁文件命令设置 BUNDLER_VERSION=4.0.15。
+- Checkout 的完整提交号为 a74213e6daab33936ae49f1cad961e751d10c66f，与本次推送一致。
+- 将任务日志中打印的完整 Gemfile.lock 去除日志时间戳后，与该提交中的 207 行锁文件逐行比对，内容一致，包含两个平台、依赖版本、校验值及 Bundler 版本。
+- GitHub 提交中的锁文件与本地提交的 Git blob 均为 `95198fea8b73c92d88f6ec624934c8b1ec8fc4f6`；已确认使用本次纳入版本管理的锁文件。
+
+当前锁文件的 Windows 与 Ubuntu 实际构建验证均已完成；此前待验证条目已勾选。该次运行只验证构建，没有上传 Pages 产物或发布网站。
+
+本次仅补充维护记录，身份称谓、页面内容、依赖、工作流和后台设置均未修改；该记录按用户后续授权单独提交到本地 Git，不包含推送或部署。
