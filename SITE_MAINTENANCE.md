@@ -339,3 +339,13 @@
 - 该次提交仅更新本维护文档，Bootstrap、身份称谓、依赖和 Actions 均未修改；已完成的 Ubuntu npm 实际验证待办保持已完成。
 
 本轮仅在本维护文档补记上述结果，按用户后续授权提交到本地 Git，未推送或部署。
+
+## 2026-10-29 375c587 文档提交构建复核
+
+- 按用户授权，将 main 的文档提交 [375c587c273f19eb1724e4637ae16ad5ffdfd69d](https://github.com/chenhui-lv/chenhui-lv.github.io/commit/375c587c273f19eb1724e4637ae16ad5ffdfd69d) 推送到 GitHub；对应 [Actions 40812302218](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40812302218) 为 event=push、status=completed、conclusion=success。
+- [build 123245236508](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40812302218/job/123245236508) 成功；Setup Node、Verify JavaScript、Setup Ruby 和 Build site 均 success。
+- Ubuntu npm 锁文件安装、JavaScript 重建和语法检查通过；package.json/package-lock.json 无差异，生成的 site.min.js 与该提交中的文件逐字节一致；后续 Jekyll 生产构建通过。
+- Upload artifact=skipped，deploy=skipped；本次推送只验证构建，未手动触发部署或发布网站。
+- 该次提交仅更新本维护文档，Bootstrap、身份称谓、依赖和 Actions 均未修改；已完成的 Ubuntu npm 实际验证待办保持已完成。
+
+本轮仅在本维护文档补记上述结果，按用户后续授权提交到本地 Git，未推送或部署。
