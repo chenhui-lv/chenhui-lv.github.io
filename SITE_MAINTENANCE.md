@@ -258,3 +258,19 @@
 - 本轮只验证 Windows 的 npm 安装及 JavaScript 重建，未验证 Ubuntu npm 构建，未进行浏览器复测或安全审计；现有 site.min.js 字节未改变。既有 Ubuntu Ruby/Jekyll 成功记录不能替代 npm 跨平台验证。
 - 后续回退可撤销本轮 package.json、.gitignore、README.md、本维护文档及新增 package-lock.json 的对应改动；无需修改线上网站或恢复 JavaScript 产物。
 - 准备及验证阶段仅修改上述 5 个文件及本地忽略的依赖/构建目录；随后按用户授权将这 5 个文件提交到本地 Git，保留 Ubuntu npm 构建待验证记录，未推送或部署，未修改 Actions。
+
+## 2026-10-29 npm 锁文件提交后的 push 构建验证
+
+按用户后续授权，将 main 的 103955a 推送到 GitHub；本次使用原有 Actions 工作流，仅验证 Jekyll 构建，未手动触发部署。
+
+| 项目 | 记录 |
+| --- | --- |
+| 分支及提交 | main / [103955aafcf3e5448c5b1219d3a20fa67e172fc2](https://github.com/chenhui-lv/chenhui-lv.github.io/commit/103955aafcf3e5448c5b1219d3a20fa67e172fc2) |
+| Actions | [40796357284](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40796357284)，event=push，status=completed，conclusion=success |
+| Jekyll 构建任务 | [build 123193661414](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40796357284/job/123193661414)，success；Setup Ruby 与 Build site 均成功 |
+| Pages 产物上传 | Upload artifact=skipped |
+| 部署任务 | deploy=skipped |
+
+该次 Actions 未运行 npm 安装或 JavaScript 重建，因此只确认 Ubuntu 上的 Jekyll 构建通过；Ubuntu npm 锁文件安装及 JavaScript 重建仍待验证，对应待办保持未勾选，不能用本次成功替代该项检查。
+
+该次推送未修改 Bootstrap、身份称谓、Actions 或后台设置，没有上传 Pages 产物或发布网站。以上为推送后的补充记录；该记录按用户后续授权单独提交到本地 Git，保留 Ubuntu npm 构建待验证事项，不包含推送或部署。
