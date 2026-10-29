@@ -50,7 +50,10 @@
 - site.min.js 由 site.js 生成，修改时同步维护。
 - 私人资料存放在发布根目录之外；.gitignore 不能阻止 Jekyll 复制文件。
 - 维护文档和脚本在 _config.yml 的 exclude 中排除。
-- Gemfile.lock 目前被忽略且仅列 Windows 平台；Windows 本地与 Ubuntu/Ruby 3.2 云端构建均已通过，锁文件提交及跨平台锁定策略仍待确定。
+- Gemfile.lock 纳入版本管理，包含 x64-mingw-ucrt 和 x86_64-linux 两个平台及依赖 SHA256 校验值；Bundler 版本由 BUNDLED WITH 固定为 4.0.15。不得为解决安装失败直接删除锁文件或运行全量 bundle update。
+- 首次安装执行 gem install bundler -v 4.0.15，再执行 bundle _4.0.15_ install；验证时临时设置 BUNDLE_FROZEN=true，运行 bundle check 和 JEKYLL_ENV=production 的 bundle exec jekyll build，结束后退出该终端或清除临时环境变量。
+- 依赖变更须单独审查 Gemfile.lock 差异；确认两个平台保留、Bundler 与 Ruby/RubyGems 兼容，再分别验证 Windows 和 Ubuntu。只有用户授权推送后才能检查新的 Actions 构建，部署另行授权。
+- 现有 ruby/setup-ruby@v1 会读取锁文件的 BUNDLED WITH，并在 bundler-cache: true 且存在锁文件时采用 deployment 模式；无需在工作流重复指定 Bundler 版本。本次未修改工作流。
 - package-lock.json 目前被忽略；下一次涉及 JavaScript 依赖时确定锁文件策略。
 - _sass/bootstrap_bak.scss 疑似旧备份，未确认前保留。
 
@@ -67,7 +70,9 @@
 - [x] 核对两篇新增论文的标题与作者，按用户确认更新 Combinatorica 待刊状态；14 条引用键唯一、合作者统计一致，线上内容已验收。
 - [ ] 按后续更新范围持续核验既有论文的完整元数据；DOI 10.1080/03081087.2019.1628911 的访问检查返回 403，尚不能认定失效。
 - [x] 验证 Windows 本地构建及 Ubuntu/Ruby 3.2 云端构建。
-- [ ] 确定 Gemfile.lock、package-lock.json 的版本管理与跨平台锁定策略。
+- [x] 将 Windows/Ubuntu Gemfile.lock 纳入版本管理，按最近成功 Ubuntu 构建锁定依赖，并通过 Windows 冻结安装和生产构建（2026-10-29）。
+- [ ] 在 Ubuntu/Ruby 3.2 上实际验证当前锁文件及 Bundler 4.0.15；历史 Ubuntu 成功构建使用 Bundler 2.4.19，不能代替本次验证。
+- [ ] 后续涉及 JavaScript 依赖时确定 package-lock.json 的版本管理策略（本次暂不处理）。
 - [x] 修复页脚闭合标签，并完成电脑宽度 1440、手机宽度 390 的浏览器检查。
 - [ ] 确认核心页面 sitemap: false 设置是否符合搜索引擎收录意图；手机实机测试尚未执行。
 - [x] 推送 main 后确认仅构建、不上传产物、不部署；获单独授权后手动部署并完成线上验收。
@@ -167,3 +172,40 @@
 - 身份称谓保持不变。本次发布未改自定义域名、DNS 或 Pages 后台设置。
 
 以上发布与验收已完成。本节为发布后补充的维护记录；文档记录更新与网站部署分开进行，未再次触发部署。
+
+## 2026-10-29 Windows / Ubuntu 锁文件准备
+
+- 基线为最近成功的 [push 构建 40783801700](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40783801700)，提交 c8aa507；Ubuntu 24.04、Ruby 3.2.11、Bundler 2.4.19。该次构建成功且部署跳过。
+- 从该任务日志中的完整锁文件恢复 55 个 Linux 依赖条目，保留版本及依赖约束，补充 Windows x64-mingw-ucrt 平台。新增的三个原生包条目为 ffi 1.17.4、google-protobuf 4.36.2、sass-embedded 1.77.8 的 Windows 版本；Linux 条目未改变。
+- 锁文件记录 Bundler 4.0.15，与本机现有版本一致；[官方兼容性要求](https://guides.rubygems.org/bundler-compatibility/)为 Ruby >= 3.2.0、RubyGems >= 3.4.1。现有 Actions Ruby 3.2 环境满足版本系列要求，但切换 Bundler 后仍须实际验证。
+- 通过 bundle lock --add-checksums 补齐依赖 SHA256；移除 .gitignore 中的 Gemfile.lock 条目，按用户授权随本次本地提交纳入版本管理。
+- [ruby/setup-ruby 官方说明](https://github.com/ruby/setup-ruby#bundler)确认会采用 BUNDLED WITH 指定版本；无需改动当前工作流或部署条件。
+
+相比原先仅用于 Windows 的本地锁文件，以下 14 个版本对齐到成功的 Ubuntu 基线，并非在该基线上另行升级：
+
+| 依赖 | 原 Windows 版本 | Ubuntu 基线 / 当前版本 |
+| --- | --- | --- |
+| bigdecimal | 4.1.2 | 4.1.3 |
+| citeproc | 1.1.0 | 2.0.0 |
+| citeproc-ruby | 2.1.8 | 2.3.0 |
+| concurrent-ruby | 1.3.7 | 1.3.8 |
+| csl | 2.2.1 | 2.5.0 |
+| csl-styles | 2.0.2 | 2.1.0 |
+| csv | 3.3.5 | 3.3.7 |
+| date | 3.5.1 | 3.6.0 |
+| google-protobuf | 4.35.1 | 4.36.2 |
+| json | 2.20.0 | 3.1.0 |
+| listen | 3.10.0 | 3.10.1 |
+| rack | 3.2.6 | 3.2.7 |
+| time | 0.4.2 | 0.5.0 |
+| uri | 1.1.1 | 1.1.2 |
+
+验证结果及范围：
+
+- Windows Ruby 4.0.5 / RubyGems 4.0.10 / Bundler 4.0.15：BUNDLE_FROZEN=true 的 bundle install、bundle check 及生产模式 jekyll build 全部成功；冻结检查及构建前后 Gemfile.lock 的 SHA256 一致。
+- 6 个 HTML 页面生成，14 个论文 BIB 按钮目标完整且无重复 ID；8 个不同的 HTML 站内页面及资源目标均存在，页面内锚点检查通过；JSON、XML 解析通过。
+- 两篇新论文仅列于 Publications，Combinatorica 待刊状态及新合作者保留；23 份示例原文件仍存在，发布产物和文本引用中未发现残留，产物不含 CNAME 或 Gemfile.lock。
+- Linux 55 个依赖条目与成功构建日志逐项比对一致，另有 3 个 Windows 原生包条目；所有 58 个依赖条目都有校验值（另记录 Bundler 的校验值）。
+- 本机未发现可用的 Ubuntu 环境，因此未执行当前锁文件在 Ubuntu/Ruby 3.2 + Bundler 4.0.15 下的实际安装或构建；待获得相应验证条件或后续推送授权后确认。历史成功记录不能替代该项检查。
+- 本轮未进行浏览器视觉复测或在线外链复查；页面源码、身份称谓、Gemfile、工作流及 package-lock.json 策略均未修改。README 同时纠正了工作流“尚未推送”的过时说明。
+- 准备及验证阶段未提交、推送或部署；随后按用户授权，仅将 Gemfile.lock、.gitignore、README.md 和本维护文档提交到本地 Git，未推送或部署，Ubuntu 实际构建待办保留。旧 Windows 锁文件已备份至 D:/Temp/academic-site-Gemfile.lock-before-cross-platform-20261029；如需回退，可通过新的撤销提交恢复相关改动，并按需恢复该本地备份，旧版本 gem 未删除，无需修改线上网站。

@@ -22,6 +22,10 @@
 ## 本地使用
 在项目根目录操作。需要 Ruby、Bundler 及 Gemfile 中的依赖；是否完整及兼容，须以实际验证为准。依赖安装或升级应单独审查。
 
+Gemfile.lock 纳入版本管理，锁定 Windows x64-mingw-ucrt 和 Ubuntu x86_64-linux 两个平台，并记录依赖校验值。使用锁文件指定的 Bundler 4.0.15；首次准备环境时执行 `gem install bundler -v 4.0.15`，再执行 `bundle _4.0.15_ install`。日常内容更新不运行 `bundle update`，不删除锁文件重新解析依赖。
+
+2026-10-29 已验证 Windows Ruby 4.0.5 的冻结安装和生产构建。Linux 依赖版本与最近成功的 Ubuntu/Ruby 3.2 构建一致；当前锁文件配合 Bundler 4.0.15 的 Ubuntu 实际构建仍待验证。详细基线、验证范围及更新流程见维护文档。
+
 预览：
 ```sh
 bundle exec jekyll serve
@@ -46,7 +50,7 @@ npm run build
 
 源码及发布分支统一为 main。工作流在推送 main 时只构建验证；仅手动触发（workflow_dispatch）且选择 main 时才上传 Pages 产物并部署。手动选择其他分支只构建，不部署。发布仍须获得用户授权。
 
-上述工作流修订尚未推送到 GitHub；远端工作流仍监听 source。2026-10-29 已只读核实 Pages 后台：Source 为 GitHub Actions，自定义域名为空，默认网址强制 HTTPS；github-pages 环境仅允许 main 分支、不允许标签部署。
+上述工作流已随提交 8d008be 推送并完成手动部署，记录见维护文档。2026-10-29 已只读核实 Pages 后台：Source 为 GitHub Actions，自定义域名为空，默认网址强制 HTTPS；github-pages 环境仅允许 main 分支、不允许标签部署。
 
 默认网址为 https://chenhui-lv.github.io/ 。本地示例 CNAME 已按用户授权删除，当前无需 CNAME；未来启用自定义域名须另行确认，不能恢复模板示例值。本次未修改后台设置。
 
