@@ -24,7 +24,7 @@
 
 Gemfile.lock 纳入版本管理，锁定 Windows x64-mingw-ucrt 和 Ubuntu x86_64-linux 两个平台，并记录依赖校验值。使用锁文件指定的 Bundler 4.0.15；首次准备环境时执行 `gem install bundler -v 4.0.15`，再执行 `bundle _4.0.15_ install`。日常内容更新不运行 `bundle update`，不删除锁文件重新解析依赖。
 
-2026-10-29 已验证 Windows Ruby 4.0.5 的冻结安装和生产构建。Linux 依赖版本与最近成功的 Ubuntu/Ruby 3.2 构建一致；当前锁文件配合 Bundler 4.0.15 的 Ubuntu 实际构建仍待验证。详细基线、验证范围及更新流程见维护文档。
+2026-10-29 已验证 Windows Ruby 4.0.5 的冻结安装和生产构建。提交 a74213e 的 [Actions 40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977) 已在 Ubuntu 24.04.5 / Ruby 3.2.11 上使用 Bundler 4.0.15，按已提交的 Gemfile.lock 完成依赖安装和生产构建；日志中的完整锁文件与提交一致，产物上传与部署均跳过。详细基线、验证范围及更新流程见 [SITE_MAINTENANCE.md](SITE_MAINTENANCE.md)。
 
 预览：
 ```sh
