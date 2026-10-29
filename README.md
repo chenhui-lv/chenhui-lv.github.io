@@ -46,9 +46,9 @@ npm run build
 
 本地 JavaScript 验证基线为 Windows x64、Node 24.18.0、npm 11.16.0。Windows 和 Ubuntu 共用一份 package-lock.json，各自在目标平台安装，不能复制 node_modules 跨平台使用。Bootstrap 继续固定为 5.3.3；网页使用仓库内的 Bootstrap JS 和 Sass 文件，npm run build 不会自动更新这些文件。
 
-本地 Actions 配置新增 Node 24.18.0 环境准备和 JavaScript 验证：按锁文件安装、重建及检查语法，确认 package.json 和 package-lock.json 无差异，并将生成的 site.min.js 与当前提交逐字节比较；全部通过后继续 Jekyll 构建。任何一步失败均阻止后续构建和部署，不自动提交生成文件。
+Actions 配置包含 Node 24.18.0 环境准备和 JavaScript 验证：按锁文件安装、重建及检查语法，确认 package.json 和 package-lock.json 无差异，并将生成的 site.min.js 与当前提交逐字节比较；全部通过后继续 Jekyll 构建。任何一步失败均阻止后续构建和部署，不自动提交生成文件。
 
-这次工作流修改仅提交到本地 Git，尚未推送，远端当前仍只构建 Jekyll。npm 锁文件的 Ubuntu 实际安装、JavaScript 重建及产物一致性仍待验证；既有 Ruby/Jekyll 云端成功记录不代替该项检查。只有后续获授权推送并实际通过 Actions 后，才能更新验证状态。详见维护文档。
+该工作流已随提交 42544cd 推送到 main，并于 2026-10-29 通过 [Actions 40798127957](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40798127957)：Ubuntu 24.04.5 / Node 24.18.0 / npm 11.16.0 / esbuild 0.25.0，锁文件安装、JavaScript 重建、语法检查及压缩产物逐字节比对均成功，package.json 和 package-lock.json 无差异，随后 Jekyll 构建成功。Pages 产物上传和部署均跳过，未发布网站。详细记录见 [SITE_MAINTENANCE.md](SITE_MAINTENANCE.md)。
 
 ## 维护与发布
 先阅读 [AGENTS.md](AGENTS.md) 和 [SITE_MAINTENANCE.md](SITE_MAINTENANCE.md)。

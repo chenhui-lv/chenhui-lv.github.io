@@ -35,7 +35,7 @@
 
 本地工作流以 main 为源码及发布分支：push main 只构建验证，不上传 Pages 产物、不部署。仅手动触发 workflow_dispatch 且选择 main 时，构建成功后才上传产物并部署；手动选择其他分支只构建。部署写权限仅授予 deploy 任务。
 
-本地工作流新增 JavaScript 验证，执行顺序为 Checkout → Setup Node → Verify JavaScript → Setup Ruby → Build site。JavaScript 验证按 npm 锁文件安装并重建，核对清单、锁文件和已提交压缩产物；失败即停止，不允许继续上传或部署。该新增检查仅提交到本地 Git，尚未推送，Ubuntu 实际执行仍待验证。
+工作流包含 JavaScript 验证，执行顺序为 Checkout → Setup Node → Verify JavaScript → Setup Ruby → Build site。JavaScript 验证按 npm 锁文件安装并重建，核对清单、锁文件和已提交压缩产物；失败即停止，不允许继续上传或部署。该检查已随提交 42544cd 推送到 main，并通过 Ubuntu 实际验证，见 [Actions 40798127957](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40798127957) 及文末记录。
 
 获得发布授权且本地配置已推送后，在 Actions 中选择 Build and Deploy → Run workflow → main。该手动操作会发布，未获授权不得执行。Rakefile 的 publish 任务已停用，调用时直接报错退出，没有 generate 前置任务。
 
@@ -59,7 +59,7 @@
 - 现有 ruby/setup-ruby@v1 会读取锁文件的 BUNDLED WITH，并在 bundler-cache: true 且存在锁文件时采用 deployment 模式；无需在工作流重复指定 Bundler 版本。本次未修改 Ruby 配置。
 - package-lock.json 纳入版本管理，与 package.json 一起审查；esbuild 固定为 0.25.0，Bootstrap 保持 5.3.3。日常使用 npm ci --include=dev --include=optional，只有有意调整依赖时才重新生成锁文件，不运行无关的 npm update。
 - JavaScript 本地验证基线为 Windows x64 / Node 24.18.0 / npm 11.16.0；两个平台共用 npm 锁文件，各自安装 esbuild 平台原生包，不复制 node_modules。npm 锁文件和 node_modules 继续由 _config.yml 排除发布。
-- 本地 Actions 配置新增 Node 24.18.0（自带 npm 11.16.0），关闭额外 npm 缓存；执行 npm ci --include=dev --include=optional、npm run build 及生成脚本语法检查，再通过 git diff 核对 package.json/package-lock.json、通过 git show 与 cmp 逐字节核对 site.min.js。远端当前仍运行旧工作流，新增检查须经后续授权推送后才生效。
+- Actions 配置使用 Node 24.18.0（自带 npm 11.16.0），关闭额外 npm 缓存；执行 npm ci --include=dev --include=optional、npm run build 及生成脚本语法检查，再通过 git diff 核对 package.json/package-lock.json、通过 git show 与 cmp 逐字节核对 site.min.js。该检查已在 main 生效，并通过提交 42544cd 的 Ubuntu 实际构建验证。
 - 不在 Actions 中删除或重生成锁文件，不自动提交产物，不忽略安装或比对错误；Ubuntu npm 实际安装、重建及一致性验证通过前，保留相应未完成待办。
 - 页面使用仓库内的 Bootstrap JS/Sass，npm run build 只生成 site.min.js；升级 npm 中的 Bootstrap 不会自动同步网页使用的文件，相关升级须单独审查。
 - _sass/bootstrap_bak.scss 疑似旧备份，未确认前保留。
@@ -80,7 +80,7 @@
 - [x] 将 Windows/Ubuntu Gemfile.lock 纳入版本管理，按最近成功 Ubuntu 构建锁定依赖，并通过 Windows 冻结安装和生产构建（2026-10-29）。
 - [x] 在 Ubuntu/Ruby 3.2 上实际验证已提交的锁文件及 Bundler 4.0.15；提交 a74213e 的 [Actions 40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977) 安装与生产构建成功，日志锁文件与提交一致，Upload artifact 和 deploy 均 skipped（2026-10-29）。
 - [x] 确定 package-lock.json 纳入版本管理，固定 esbuild 0.25.0，保持 Bootstrap 5.3.3，并完成本地构建验证（2026-10-29）。
-- [ ] 在 Ubuntu 上实际验证 npm 锁文件安装、JavaScript 重建和压缩产物一致性；本地 Actions 已配置相关检查，尚未推送或在 Ubuntu 执行，不能据既有 Jekyll 构建成功认定该项完成。
+- [x] 在 Ubuntu 上实际验证 npm 锁文件安装、JavaScript 重建和压缩产物一致性；提交 42544cd 的 [Actions 40798127957](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40798127957) 全部通过，package.json/package-lock.json 无差异，Upload artifact 与 deploy 均 skipped（2026-10-29）。
 - [x] 修复页脚闭合标签，并完成电脑宽度 1440、手机宽度 390 的浏览器检查。
 - [ ] 确认核心页面 sitemap: false 设置是否符合搜索引擎收录意图；手机实机测试尚未执行。
 - [x] 推送 main 后确认仅构建、不上传产物、不部署；获单独授权后手动部署并完成线上验收。
@@ -280,6 +280,8 @@
 
 ## 2026-10-29 本地 Actions 增加 Ubuntu npm 验证
 
+本节保留工作流准备及 Windows 本地验证阶段的历史记录；当时的 Ubuntu npm 待验证事项已由后续“Ubuntu npm 实际构建与产物一致性验证成功”记录完成确认。
+
 - 按用户授权，仅在现有 build 任务的 Checkout 后、Setup Ruby 前新增 Setup Node 和 Verify JavaScript 两个步骤；actions/setup-node@v6 固定 Node 24.18.0，关闭额外 npm 缓存，不新增任务或工作流文件。
 - Verify JavaScript 使用 bash，打印 Node/npm/esbuild 版本，按锁文件安装开发及可选依赖，执行现有 npm run build 和 node --check；随后用 git diff --exit-code 检查 package.json/package-lock.json，用 git show HEAD:assets/js/site.min.js 与 cmp 对生成文件逐字节比对。
 - 不设置 continue-on-error，不添加自动提交、锁文件重生成或产物上传入口；任一步失败即停止。push 仍只验证，Upload artifact 和 deploy 均保留 workflow_dispatch 且 refs/heads/main 的原有条件，deploy 继续 needs: build。
@@ -291,3 +293,29 @@
 - README 与本维护文档同步区分“本地已配置”和“远端尚未生效”；Ubuntu npm 实际安装、JavaScript 重建及产物一致性仍待验证，相关待办未勾选。Windows Git Bash 的通过结果不代替 Ubuntu 实测，既有 Jekyll 云端成功记录也不代替该项检查。
 - Bootstrap、身份称谓、package.json、两个依赖锁文件及页面/JavaScript 源码均未修改。本轮未进行浏览器复测；site.min.js 与原提交一致。
 - 本轮仅修改 .github/workflows/deploy.yml、README.md 和本维护文档，按用户后续授权提交到本地 Git，未推送或部署，未触发远端 Actions；Ubuntu npm 实际验证仍待完成。若需回退，可通过新的撤销提交恢复本轮这 3 个文件的对应改动，线上网站不受影响。
+
+## 2026-10-29 Ubuntu npm 实际构建与产物一致性验证成功
+
+按用户授权，将 main 的 42544cd 推送到 GitHub，实际执行新增的 Ubuntu npm 验证；未手动触发部署。日期按 Australia/Sydney 记录。
+
+| 项目 | 核对结果 |
+| --- | --- |
+| 分支及提交 | main / [42544cd331da7c9af5665c7b41e5ad72fe0dbcf1](https://github.com/chenhui-lv/chenhui-lv.github.io/commit/42544cd331da7c9af5665c7b41e5ad72fe0dbcf1) |
+| Actions | [40798127957](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40798127957)，event=push，status=completed，conclusion=success |
+| 构建任务 | [build 123199448800](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40798127957/job/123199448800)，Setup Node、Verify JavaScript、Setup Ruby 和 Build site 均 success |
+| 实际环境 | Ubuntu 24.04.5 / Node 24.18.0 / npm 11.16.0 / esbuild 0.25.0 |
+| npm 锁文件安装 | npm ci --include=dev --include=optional 成功，安装 4 个包 |
+| JavaScript 重建 | npm run build 成功，生成 assets/js/site.min.js |
+| 语法检查 | node --check assets/js/site.min.js 通过 |
+| 清单及锁文件 | git diff --exit-code -- package.json package-lock.json 通过，无差异 |
+| 压缩产物一致性 | git show HEAD:assets/js/site.min.js 与 cmp 比对通过，Ubuntu 生成文件与该提交中的文件逐字节一致 |
+| Jekyll 构建 | 后续生产构建成功，Ruby 3.2.11 / Bundler 4.0.15 |
+| 发布保护 | Upload artifact=skipped，deploy=skipped；该次运行产物列表为空 |
+
+日志确认 Verify JavaScript 使用 /usr/bin/bash --noprofile --norc -e -o pipefail 执行，安装、重建及全部比对完成且步骤成功；没有忽略错误或自动提交产物。此前 Windows 的安装及重建验证与本次 Ubuntu 实测共同完成 npm 跨平台验证，对应待办已勾选。
+
+仍出现已知的非阻塞 allow-scripts 警告：esbuild@0.25.0 的 postinstall 尚未在 allowScripts 中声明；本次安装和构建成功，未修改安装脚本策略。
+
+本次推送只验证构建，没有上传 Pages 产物或部署网站。Bootstrap、身份称谓、依赖版本和锁文件未因本次验证改变；README 及本维护文档的当前状态已同步更新，早期阶段记录作为历史保留。
+
+本轮仅补充以上两份文档，按用户后续授权单独提交到本地 Git，未推送或部署，未修改 Actions 或后台设置。
