@@ -3,7 +3,6 @@ _site/
 .jekyll-cache/
 .sass-cache/
 .DS_Store
-package-lock.json
 node_modules/
 .worktrees/
 .jekyll-metadata

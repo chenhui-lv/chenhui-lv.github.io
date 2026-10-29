@@ -37,11 +37,16 @@ bundle exec jekyll serve
 bundle exec jekyll build
 ```
 
-仅修改 JavaScript 时，需要 Node 工具和 package.json 中的依赖：
+仅修改 JavaScript 时，需要 Node 工具和 package.json 中的依赖。esbuild 固定为 0.25.0，package-lock.json 纳入版本管理；首次生成后及后续有意更新依赖时审查锁文件差异，日常安装按锁文件执行：
 ```sh
+npm ci --include=dev --include=optional
 npm run build
 ```
-该命令从 assets/js/site.js 生成页面实际使用的 assets/js/site.min.js。普通页面和论文更新无需运行 npm。
+构建从 assets/js/site.js 生成页面实际使用的 assets/js/site.min.js，两者同步维护。普通页面和论文更新无需运行 npm。
+
+本地 JavaScript 验证基线为 Windows x64、Node 24.18.0、npm 11.16.0。Windows 和 Ubuntu 共用一份 package-lock.json，各自在目标平台安装，不能复制 node_modules 跨平台使用。Bootstrap 继续固定为 5.3.3；网页使用仓库内的 Bootstrap JS 和 Sass 文件，npm run build 不会自动更新这些文件。
+
+现有 Actions 只构建 Jekyll，使用已提交的 site.min.js，不运行 npm；本次未修改工作流。npm 锁文件的 Ubuntu 安装和 JavaScript 重建仍待验证，既有 Ruby/Jekyll 云端成功记录不代替该项检查。详见维护文档。
 
 ## 维护与发布
 先阅读 [AGENTS.md](AGENTS.md) 和 [SITE_MAINTENANCE.md](SITE_MAINTENANCE.md)。

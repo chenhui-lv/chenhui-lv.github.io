@@ -17,7 +17,7 @@
 
 ## 本地验证
 1. 在依赖已准备好的环境执行 bundle exec jekyll build，检查错误。
-2. 修改 JavaScript 时先执行 npm run build，同步生成压缩文件。
+2. 修改 JavaScript 时先执行 npm ci --include=dev --include=optional，再执行 npm run build，同步生成压缩文件；审查生成文件与源码差异，普通内容更新无需运行 npm。
 3. 使用 bundle exec jekyll serve 预览，检查导航、搜索、论文按钮、公式及深色模式。
 4. 检查桌面及手机宽度下的排版，避免横向溢出和按钮不可操作。
 5. 核对内部链接、本地资源和本次涉及的外部链接；区分网络限制和实际失效。
@@ -55,7 +55,10 @@
 - 首次安装执行 gem install bundler -v 4.0.15，再执行 bundle _4.0.15_ install；验证时临时设置 BUNDLE_FROZEN=true，运行 bundle check 和 JEKYLL_ENV=production 的 bundle exec jekyll build，结束后退出该终端或清除临时环境变量。
 - 依赖变更须单独审查 Gemfile.lock 差异；确认两个平台保留、Bundler 与 Ruby/RubyGems 兼容，再分别验证 Windows 和 Ubuntu。只有用户授权推送后才能检查新的 Actions 构建，部署另行授权。
 - 现有 ruby/setup-ruby@v1 会读取锁文件的 BUNDLED WITH，并在 bundler-cache: true 且存在锁文件时采用 deployment 模式；无需在工作流重复指定 Bundler 版本。本次未修改工作流。
-- package-lock.json 目前被忽略；下一次涉及 JavaScript 依赖时确定锁文件策略。
+- package-lock.json 纳入版本管理，与 package.json 一起审查；esbuild 固定为 0.25.0，Bootstrap 保持 5.3.3。日常使用 npm ci --include=dev --include=optional，只有有意调整依赖时才重新生成锁文件，不运行无关的 npm update。
+- JavaScript 本地验证基线为 Windows x64 / Node 24.18.0 / npm 11.16.0；两个平台共用 npm 锁文件，各自安装 esbuild 平台原生包，不复制 node_modules。npm 锁文件和 node_modules 继续由 _config.yml 排除发布。
+- 当前 Actions 不运行 npm，只使用已提交的 site.min.js；JavaScript 源码与产物的一致性须在本地检查，npm 在 Ubuntu 上的安装及 JavaScript 重建另行验证。本次不修改 Actions。
+- 页面使用仓库内的 Bootstrap JS/Sass，npm run build 只生成 site.min.js；升级 npm 中的 Bootstrap 不会自动同步网页使用的文件，相关升级须单独审查。
 - _sass/bootstrap_bak.scss 疑似旧备份，未确认前保留。
 
 ## 初始化待办（2026-10-28 本地审查）
@@ -73,7 +76,8 @@
 - [x] 验证 Windows 本地构建及 Ubuntu/Ruby 3.2 云端构建。
 - [x] 将 Windows/Ubuntu Gemfile.lock 纳入版本管理，按最近成功 Ubuntu 构建锁定依赖，并通过 Windows 冻结安装和生产构建（2026-10-29）。
 - [x] 在 Ubuntu/Ruby 3.2 上实际验证已提交的锁文件及 Bundler 4.0.15；提交 a74213e 的 [Actions 40791952977](https://github.com/chenhui-lv/chenhui-lv.github.io/actions/runs/40791952977) 安装与生产构建成功，日志锁文件与提交一致，Upload artifact 和 deploy 均 skipped（2026-10-29）。
-- [ ] 后续涉及 JavaScript 依赖时确定 package-lock.json 的版本管理策略（本次暂不处理）。
+- [x] 确定 package-lock.json 纳入版本管理，固定 esbuild 0.25.0，保持 Bootstrap 5.3.3，并完成本地构建验证（2026-10-29）。
+- [ ] 在 Ubuntu 上验证 npm 锁文件安装及 JavaScript 重建；现有 Actions 未增加 npm 检查，不能据 Jekyll 构建成功认定该项完成。
 - [x] 修复页脚闭合标签，并完成电脑宽度 1440、手机宽度 390 的浏览器检查。
 - [ ] 确认核心页面 sitemap: false 设置是否符合搜索引擎收录意图；手机实机测试尚未执行。
 - [x] 推送 main 后确认仅构建、不上传产物、不部署；获单独授权后手动部署并完成线上验收。
@@ -238,3 +242,19 @@
 当前锁文件的 Windows 与 Ubuntu 实际构建验证均已完成；此前待验证条目已勾选。该次运行只验证构建，没有上传 Pages 产物或发布网站。
 
 本次仅补充维护记录，身份称谓、页面内容、依赖、工作流和后台设置均未修改；该记录按用户后续授权单独提交到本地 Git，不包含推送或部署。
+
+## 2026-10-29 npm 锁文件与本地构建验证
+
+- 按用户授权，将 package.json 的 esbuild 从 ^0.25.0 固定为 0.25.0；Bootstrap 仍为 5.3.3，未修改仓库内的 Bootstrap JS/Sass、身份称谓、JavaScript 源码或 Actions。
+- 使用 Windows x64 / Node 24.18.0 / npm 11.16.0，从官方 registry.npmjs.org 生成 package-lock.json（lockfileVersion=3）；移除 .gitignore 中对该锁文件的忽略，保留 node_modules 忽略规则。按用户后续授权，锁文件随本次本地提交纳入版本管理。
+- 锁文件有 29 个条目（含根项目），包含 Windows x64 与 Linux x64 的 esbuild 0.25.0 可选原生包；所有非根条目均有官方 registry 下载地址及 integrity 校验值。Bootstrap 固定为 5.3.3，间接依赖 @popperjs/core 锁定为 2.11.8。
+- 按新锁文件执行 npm ci --include=dev --include=optional，安装成功；npm ls --depth=0 确认 bootstrap@5.3.3 与 esbuild@0.25.0，实际 esbuild --version 为 0.25.0。
+- npm run build 和生成脚本的 node --check 均通过；生成的 assets/js/site.min.js 与原已提交文件完全一致，SHA256 为 72113A94306204F1627D8E7C271BA12BC08522CBADABED82E82AF907311273CA，无需提交新的压缩文件。
+- 安装及 JavaScript 构建前后 package-lock.json 未变化，SHA256 为 37309B350C8683CD1E29DA96F5D39E976B3C970BBB316C5DDF868BE7D6E258EA。
+- npm 安装出现非阻塞的 allow-scripts 警告：esbuild@0.25.0 的 postinstall 尚未在 allowScripts 中声明；安装、版本核实和构建均成功。本次未修改安装脚本策略，也未执行 npm approve-scripts。
+- Bundler 4.0.15 在 BUNDLE_FROZEN=true 下检查依赖并完成 JEKYLL_ENV=production 的 Jekyll 构建，退出码 0；Gemfile.lock 未变化。
+- 生成 6 个 HTML 页面、14 条论文，BIB 目标及 HTML ID 检查通过；8 个不同的 HTML 站内页面及资源目标存在，页面锚点、JSON 和 XML 检查通过。新论文仅列于 Publications，Combinatorica 待刊状态及新合作者保留。
+- 23 份示例原文件仍存在，发布产物及其文本引用中未发现这些示例残留；根目录的 package.json、package-lock.json、维护文档及 node_modules 均未发布，整个产物不含 package-lock.json 或 node_modules，CNAME 未出现。仓库原有 assets/javascript/popper 下的第三方 package.json、README.md 与本项目根目录文件区分检查，未改动。
+- 本轮只验证 Windows 的 npm 安装及 JavaScript 重建，未验证 Ubuntu npm 构建，未进行浏览器复测或安全审计；现有 site.min.js 字节未改变。既有 Ubuntu Ruby/Jekyll 成功记录不能替代 npm 跨平台验证。
+- 后续回退可撤销本轮 package.json、.gitignore、README.md、本维护文档及新增 package-lock.json 的对应改动；无需修改线上网站或恢复 JavaScript 产物。
+- 准备及验证阶段仅修改上述 5 个文件及本地忽略的依赖/构建目录；随后按用户授权将这 5 个文件提交到本地 Git，保留 Ubuntu npm 构建待验证记录，未推送或部署，未修改 Actions。
