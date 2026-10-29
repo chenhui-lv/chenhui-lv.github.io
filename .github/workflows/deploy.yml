@@ -19,6 +19,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.18.0'
+          package-manager-cache: false
+
+      - name: Verify JavaScript
+        shell: bash
+        run: |
+          node --version
+          npm --version
+          npm ci --include=dev --include=optional
+          ./node_modules/.bin/esbuild --version
+          npm run build
+          node --check assets/js/site.min.js
+          git diff --exit-code -- package.json package-lock.json
+          git show HEAD:assets/js/site.min.js | cmp - assets/js/site.min.js
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:

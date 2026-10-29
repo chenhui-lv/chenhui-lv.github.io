@@ -46,7 +46,9 @@ npm run build
 
 本地 JavaScript 验证基线为 Windows x64、Node 24.18.0、npm 11.16.0。Windows 和 Ubuntu 共用一份 package-lock.json，各自在目标平台安装，不能复制 node_modules 跨平台使用。Bootstrap 继续固定为 5.3.3；网页使用仓库内的 Bootstrap JS 和 Sass 文件，npm run build 不会自动更新这些文件。
 
-现有 Actions 只构建 Jekyll，使用已提交的 site.min.js，不运行 npm；本次未修改工作流。npm 锁文件的 Ubuntu 安装和 JavaScript 重建仍待验证，既有 Ruby/Jekyll 云端成功记录不代替该项检查。详见维护文档。
+本地 Actions 配置新增 Node 24.18.0 环境准备和 JavaScript 验证：按锁文件安装、重建及检查语法，确认 package.json 和 package-lock.json 无差异，并将生成的 site.min.js 与当前提交逐字节比较；全部通过后继续 Jekyll 构建。任何一步失败均阻止后续构建和部署，不自动提交生成文件。
+
+这次工作流修改仅提交到本地 Git，尚未推送，远端当前仍只构建 Jekyll。npm 锁文件的 Ubuntu 实际安装、JavaScript 重建及产物一致性仍待验证；既有 Ruby/Jekyll 云端成功记录不代替该项检查。只有后续获授权推送并实际通过 Actions 后，才能更新验证状态。详见维护文档。
 
 ## 维护与发布
 先阅读 [AGENTS.md](AGENTS.md) 和 [SITE_MAINTENANCE.md](SITE_MAINTENANCE.md)。
